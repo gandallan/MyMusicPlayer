@@ -8,22 +8,22 @@
 
 import UIKit
 import AVFoundation
-import MediaPlayer //para el volumen
+
 
 class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
     
-    //************Variables
+//************Variables
     
     var indexSound:Int? //el numero de cancino seleccionado.
-    var randomSound: Int? //
-    var volumenView = MPVolumeView()
+    var randomSound: Int? // numero random del total de canciones
+    
     
     let pauseImage = UIImage(named: "pause2")
     let playImage = UIImage(named: "play2")
     let prevImage = UIImage(named: "prev")
     let nextImage = UIImage(named: "next")
     
-    //variables para el shuffle
+    //Arrat de strings
     let listaTitulos: [String] = ["Bajo Short","Baroque Coffee House","Leslie's Struct","Far Away","Cartoon Bank","TimedOut"]
     let listaAutores: [String] = ["AudioNautix","Doug Maxwell","Jhon Deley","MK2","Doug Maxwell","Jingle Punk"]
     let listaPortadas: [String] = ["image1","image2","image3","image4","image5","image6",]
@@ -31,10 +31,10 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
     
     //Declaración de AVAudioPlayer
     var reproductor = AVAudioPlayer()
+
     
     
-    
-    //*************Outlets
+//*************Outlets
     @IBOutlet weak var titulo: UILabel!
     @IBOutlet weak var autor: UILabel!
     @IBOutlet weak var portada: UIImageView!
@@ -43,7 +43,10 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
     @IBOutlet weak var prevButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     
-    //************ViewDidLoad
+    
+    
+    
+//************ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,41 +65,17 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
             
             prevButton.enabled = false
         }
-        
+        //asignamos las imagenes a los botones
         playButton.setImage(pauseImage, forState: .Normal)
         prevButton.setImage(prevImage, forState: .Normal)
         nextButton.setImage(nextImage, forState: .Normal)
         
         
-        //Asignacion de titulo y autor seleccionados de la playlista
-        titulo.text = listaTitulos[indexSound!]
-        autor.text = listaAutores[indexSound!]
-        
-        // url de portada, audio seleccionados de la playlist
-        let imgUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaPortadas[indexSound!], ofType: "jpg")!)
-        let imgData = NSData(contentsOfURL: imgUrl) //convrtiendo en data la imagen
-        
-        let cancionDir = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaCanciones[indexSound!], ofType: "mp3")!)
-        
-        
-        
-        
-        do{
-            
-            
-            try reproductor = AVAudioPlayer(contentsOfURL: cancionDir)
-            reproductor.play()
-            
-            portada.image = UIImage(data: imgData!)
-            
-            
-        }catch{
-            
-        }
+        anadirRecursosdeCanciones(numeroDeCancion: indexSound!)
         
     }
     
-    //**********Volumen con slider
+//**********Volumen con slider
     
     @IBAction func sliderValueChanged(sender: UISlider) {
         
@@ -108,7 +87,7 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
         }
     }
     
-    //***********Botones de reproducción
+//***********Botones de reproducción
     @IBAction func reproducirMusica(sender: UIButton) {
         
         let botones:String = (sender.titleLabel?.text)!
@@ -142,18 +121,7 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
             indexSound!--
             print(indexSound!)
             
-            let cancionDir = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaCanciones[indexSound!], ofType: "mp3")!)
-            let nextImgUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaPortadas[indexSound!], ofType: "jpg")!)
-            let nextImgData = NSData(contentsOfURL: nextImgUrl)
-            do{
-                try reproductor = AVAudioPlayer(contentsOfURL: cancionDir)
-                reproductor.play()
-                portada.image = UIImage(data: nextImgData!)
-                titulo.text = listaTitulos[indexSound!]
-                autor.text = listaAutores[indexSound!]
-            }catch{
-                
-            }
+            anadirRecursosdeCanciones(numeroDeCancion: indexSound!)
             
             
         case "next":
@@ -172,18 +140,8 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
             indexSound!++
             print(indexSound!)
             
-            let cancionDir = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaCanciones[indexSound!], ofType: "mp3")!)
-            let nextImgUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaPortadas[indexSound!], ofType: "jpg")!)
-            let nextImgData = NSData(contentsOfURL: nextImgUrl)
-            do{
-                try reproductor = AVAudioPlayer(contentsOfURL: cancionDir)
-                reproductor.play()
-                portada.image = UIImage(data: nextImgData!)
-                titulo.text = listaTitulos[indexSound!]
-                autor.text = listaAutores[indexSound!]
-            }catch{
-                
-            }
+            anadirRecursosdeCanciones(numeroDeCancion: indexSound!)
+            
             
             
         default: //este es el boton shuffle
@@ -199,32 +157,27 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
             indexSound = randomSound
             print(random)
             
-            // url de audio y portada random
-            
-            let shuffleAudioUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaCanciones[randomSound!], ofType: "mp3")!)
-            let shuffleImgUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaPortadas[randomSound!], ofType: "jpg")!)
-            let shufflaImgData = NSData(contentsOfURL: shuffleImgUrl)
-            
-            
-            do{
-                //si se presiona shuffle tanto play como shuffle obtienen el mismo valor del random
-                //try shuffle = AVAudioPlayer(contentsOfURL: shuffleAudioUrl)
-                
-                try reproductor = AVAudioPlayer(contentsOfURL: shuffleAudioUrl)
-                reproductor.play()
-                portada.image = UIImage(data: shufflaImgData!)
-                
-                //obtienen el mismo valor del random
-                titulo.text = listaTitulos[randomSound!]
-                autor.text = listaAutores[randomSound!]
-                
-            }catch{
-                
-            }
-            
+            anadirRecursosdeCanciones(numeroDeCancion: randomSound!)
             
         }
         
+    }
+    
+    func anadirRecursosdeCanciones(numeroDeCancion numeroDeCancion:Int){
+        
+        let cancionDir = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaCanciones[numeroDeCancion], ofType: "mp3")!)
+        let nextImgUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(listaPortadas[numeroDeCancion], ofType: "jpg")!)
+        let nextImgData = NSData(contentsOfURL: nextImgUrl)
+        do{
+            try reproductor = AVAudioPlayer(contentsOfURL: cancionDir)
+            reproductor.play()
+            portada.image = UIImage(data: nextImgData!)
+            titulo.text = listaTitulos[numeroDeCancion]
+            autor.text = listaAutores[numeroDeCancion]
+        }catch{
+            
+        }
+    
     }
     
     
