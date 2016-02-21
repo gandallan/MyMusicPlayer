@@ -1,8 +1,8 @@
 //
 //  DetailsViewController.swift
-//  My_beginner_Spotify
+//  myMusicPlayer
 //
-//  Created by Gandhi Mena Salas on 09/02/16.
+//  Created by Gandhi Mena Salas on 20/02/16.
 //  Copyright © 2016 Trenx. All rights reserved.
 //
 
@@ -162,6 +162,7 @@ class DetailsViewController: UIViewController,AVAudioPlayerDelegate {
         }
         
     }
+    
     
     func anadirRecursosdeCanciones(numeroDeCancion numeroDeCancion:Int){
         

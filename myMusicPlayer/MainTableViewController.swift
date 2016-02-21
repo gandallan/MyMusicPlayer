@@ -1,10 +1,11 @@
 //
 //  MainTableViewController.swift
-//  My_beginner_Spotify
+//  myMusicPlayer
 //
-//  Created by Gandhi Mena Salas on 09/02/16.
+//  Created by Gandhi Mena Salas on 20/02/16.
 //  Copyright © 2016 Trenx. All rights reserved.
 //
+
 
 import UIKit
 import AVFoundation
@@ -12,8 +13,7 @@ import AVFoundation
 
 class MainTableViewController: UITableViewController {
     
-    
-    
+
     //*****************Variables
     var cancionSeleccionada: Int = 0
     var portadaIndice:NSData!
