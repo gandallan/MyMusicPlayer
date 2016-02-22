@@ -3,7 +3,7 @@ My music player with shuffle
 
 With this project:
 
-You can creat play list
+You can creat a playlist
 
 ![alt tag](https://github.com/gandallan/MyMusicPlayer/blob/master/GIFS/1_playlist.gif)
 
