@@ -23,6 +23,6 @@ and change the volume
 
 ![alt tag](https://github.com/gandallan/MyMusicPlayer/blob/master/GIFS/4_volume.gif)
 
-hope to help you with this.
+ I hope to help you with this.
 
 Thanks for your visit.
